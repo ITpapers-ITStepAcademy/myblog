@@ -1,0 +1,71 @@
+﻿@model IEnumerable<MyBlog.Models.Comment>
+
+@{
+    ViewData["Title"] = "Comments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Comments</h2>
+<h5>Post: @ViewBag.Post.Title</h5>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <p>
+            <a asp-action="Create" asp-route-postId="@ViewBag.Post.Id">Create New</a>
+        </p>
+    }
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Content)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PublishDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PublishTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationUserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Post)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Content)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PublishDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PublishTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Post.Title)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        @if (User.Identity.Name == item.ApplicationUserName
+                            || User.IsInRole("SuperAdmin")
+                            )
+                        {
+                            <span>|</span>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <span>|</span>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
